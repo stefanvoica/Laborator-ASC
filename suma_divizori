@@ -1,0 +1,42 @@
+.data
+x: .space 4 
+formatcit: .asciz "%ld"
+formatafis: .asciz "%ld\n"
+
+.text
+.global main
+main:
+pushl $x
+pushl $formatcit
+call scanf
+popl %ebx
+popl %ebx
+movl $0, %ebx	
+movl x, %ecx
+et_loop:
+	xorl %edx, %edx
+	movl x, %eax
+	divl %ecx
+	cmp $0, %edx
+	je divizor
+
+cont_loop:
+	loop et_loop
+	jmp afis
+	
+divizor:
+	addl %ecx, %ebx
+	jmp cont_loop
+	
+afis:
+	pushl %ebx
+	pushl $formatafis
+	call printf
+	popl %ebx
+	popl %ebx
+	jmp et_exit
+	
+et_exit:
+	movl $1, %eax
+	xorl %ebx, %ebx
+	int $0x80
